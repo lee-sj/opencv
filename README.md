@@ -8,7 +8,7 @@ sudo apt-get install libopencv-dev
 
 gem install ruby-opencv -- --with-opencv-dir=/path/to/opencvdir
 
-먼저 단일 ruby 파일로 실행하는 방법
+1. 먼저 단일 ruby 파일로 실행하는 방법
 
 워크스페이스 최상위에 face.rb 파일을 생성한다.
 
@@ -53,3 +53,8 @@ find . -name 'haarcascade_frontalface_alt.xml'
 
 코드를 실행하면 본인이 새로저장하고자하는 파일이름으로된 파일이 한개 생성된것을 확인할수 있다. 
 사진을 확인하면 얼굴을 찾아서 사각형으로 표시가 된것이 확인된다 이러면 프로젝트 성공
+
+2. 레일즈에 올리기
+
+https://github.com/likelion-joon13/c9_workspace_002.git
+해당 워크스페이스 참조해서 대본 만들기 
