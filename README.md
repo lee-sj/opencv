@@ -54,7 +54,69 @@ find . -name 'haarcascade_frontalface_alt.xml'
 코드를 실행하면 본인이 새로저장하고자하는 파일이름으로된 파일이 한개 생성된것을 확인할수 있다. 
 사진을 확인하면 얼굴을 찾아서 사각형으로 표시가 된것이 확인된다 이러면 프로젝트 성공
 
+haarcascade_eye.xml                  haarcascade_frontalface_alt_tree.xml  haarcascade_lowerbody.xml          haarcascade_mcs_lefteye.xml   haarcascade_mcs_righteye.xml      haarcascade_smile.xml
+haarcascade_eye_tree_eyeglasses.xml  haarcascade_frontalface_default.xml   haarcascade_mcs_eyepair_big.xml    haarcascade_mcs_mouth.xml     haarcascade_mcs_upperbody.xml     haarcascade_upperbody.xml
+haarcascade_frontalface_alt.xml      haarcascade_fullbody.xml              haarcascade_mcs_eyepair_small.xml  haarcascade_mcs_nose.xml      haarcascade_profileface.xml
+haarcascade_frontalface_alt2.xml     haarcascade_lefteye_2splits.xml       haarcascade_mcs_leftear.xml        haarcascade_mcs_rightear.xml  haarcascade_righteye_2splits.xml
+
 2. 레일즈에 올리기
 
 https://github.com/likelion-joon13/c9_workspace_002.git
 해당 워크스페이스 참조해서 대본 만들기 
+
+레일즈에 올리기위해 간단한 컨트롤러를 한개 만들어준다. 
+
+rails g controller home index
+
+index에 input form 을 만들고 photos 액션을 통해서 사진을 넘겨줄것이다. 
+우선 컨트롤러에 photos 액션을 만든다. 
+그리고 우선 단일 ruby에서 썻던 코드들을 복사해서 컨트롤러로 가지고 온다. 
+
+`
+data = '/usr/share/opencv/haarcascades/haarcascade_frontalface_alt.xml'
+detector = CvHaarClassifierCascade::load(data)
+image = CvMat.load(ARGV[0])
+detector.detect_objects(image).each do |region|
+  color = CvColor::Blue
+  image.rectangle! region.top_left, region.bottom_right, :color => color
+end
+
+image.save_image("output.jpg")
+`
+
+이부분 가지고 오기 2번줄 까지는 고치는것 없고 rails 를 통해서 파일을 업로드 하므로 
+ARGV부분을 바꾸어 주어야 한다. 
+그리고 마지막 부분에서 이미지를 세이브할 이름으로 지정해준다. 
+rails는 파일을 전달 받을때 params 로 받으므로 이곳을 바꾸어 주어야 한다. 
+우선 이곳을 바꾸기전에 view에서 input form을 만들어준다. 
+
+div.container>div.row>form>div (tab)
+
+<div class="container">
+    <div class="row">
+        <form action="/home/photos" method="POST" enctype="multipart/form-data">
+            <div>
+                <label>File input</label>
+                <input name="input_file" type="file" ></input>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+
+사진 한장을 폼으로 넘겨보자
+error 페이지 > routing error > post '/home/photos'
+
+파일을 보내고 나서 에러가 나오므로 파일을 세이브하고 나서 리다이렉트를 시켜준다. 
+
+그리고 레일즈를 굳이 사용해서 opencv를 한다면 그것은 웹서비스를 하는것이므로 
+이를 본인의 서버에 저장할것이 아니라 서비스 이용자에게 다운받을수 있게 해주어야 한다. 
+해당 코드는 
+send_file("output.jpg") 이고 
+해당 photos 액션을 실행후 할 랜더링 행동에 send_file과 redirect_to 로 두개가 되었으므로 리다이렉트를 지워준다. 
+그러면 파일을 전송하고나서 사진을 저장하는 행동을 실행한다. 
+
+send_file의 속성을 한가지 더 알려주고 마친다. 
+dipostion 속성
+  send_file("output.jpg", disposition: 'inline')
+  으로 inline 을 준다면 파일이 웹화면에 뜨게되는 속성이다.
