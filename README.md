@@ -81,14 +81,27 @@ detector.detect_objects(image).each do |region|
   image.rectangle! region.top_left, region.bottom_right, :color => color
 end
 
-image.save_image("output.jpg")
+image.save_image(ARGV[2])
 `
 
-이부분 가지고 오기 2번줄 까지는 고치는것 없고 rails 를 통해서 파일을 업로드 하므로 
-ARGV부분을 바꾸어 주어야 한다. 
-그리고 마지막 부분에서 이미지를 세이브할 이름으로 지정해준다. 
-rails는 파일을 전달 받을때 params 로 받으므로 이곳을 바꾸어 주어야 한다. 
-우선 이곳을 바꾸기전에 view에서 input form을 만들어준다. 
+이부분 가지고 오기 
+다른것은 고치는것 없고 rails 를 통해서 파일을 업로드 하므로 
+ARGV부분을 바꾸어 주어야 한다.우선 ARGV[0] 을 비어있는 파람즈로 바꿔주고 params[] 
+그리고 마지막 부분에서 이미지를 세이브할 이름으로 지정해준다. 그전에는 실행할때 저장이름을 넘겨줬지만 
+여기서는 지정해주도록하자 "output.jpg"
+
+그리고 view에서 input form을 만들어준다. 
+
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+bootstrap다운받든 cdn 으로 설치하든 설치안하든 이건 본인편한대로하고 
 
 div.container>div.row>form>div (tab)
 
@@ -106,6 +119,8 @@ div.container>div.row>form>div (tab)
 
 사진 한장을 폼으로 넘겨보자
 error 페이지 > routing error > post '/home/photos'
+
+error > 어플리케이션 컨트롤러 프로텍트 주석처리 < rails 에서 input을 헬퍼로 하지 않았을때 나오는 에러 
 
 파일을 보내고 나서 에러가 나오므로 파일을 세이브하고 나서 리다이렉트를 시켜준다. 
 
