@@ -65,7 +65,7 @@ face.rb 파일 10번째 줄에서 load할때 argument가 옳지 않다는 에러
 확인하는 방법
 
 ```
-find / -name 'haarcascade_frontalface_alt.xml' (루트 폴더푸터 하위폴더 검색)
+find / -name 'haarcascade_frontalface_alt.xml' (루트 폴더터 하위폴더 검색)
 ```
 입력하면 접근이 불가능한 몇몇곳의 탐색이후 해당 파일의 위치가 나온다.  
 예시 코드와 실제 파일의 위치가 다르다는것을 알수있다.  
